@@ -3,6 +3,7 @@ package com.assem.globofly.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
 import com.assem.globofly.helpers.DestinationAdapter
@@ -41,6 +42,11 @@ class DestinationListActivity : AppCompatActivity() {
         requestCall.enqueue(object : Callback<List<Destination>> {
             override fun onFailure(call: Call<List<Destination>>, t: Throwable) {
                 Log.d("onFailure", t.message)
+                Toast.makeText(
+                    this@DestinationListActivity,
+                    "Error occurred! " + t.message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             override fun onResponse(
@@ -48,8 +54,14 @@ class DestinationListActivity : AppCompatActivity() {
                 response: Response<List<Destination>>
             ) {
                 if (response.isSuccessful) {
+                    // Status code is in the range of 200 to 299
                     val destinationList = response.body()!!
                     destiny_recycler_view.adapter = DestinationAdapter(destinationList)
+                } else if (response.code() == 401) {
+                    Log.d("onResponse", "session is expired - 401")
+                } else {
+                    // Status code is in the range of 300 to 500
+                    Log.d("onResponse", "failed to retrieve items - 300 : 500")
                 }
             }
 
