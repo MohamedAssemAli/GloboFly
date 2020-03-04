@@ -2,93 +2,162 @@ package com.assem.globofly.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
 import com.assem.globofly.helpers.SampleData
 import com.assem.globofly.models.Destination
+import com.assem.globofly.services.DestinationServices
+import com.assem.globofly.services.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class DestinationDetailActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_destiny_detail)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_destiny_detail)
 
-		setSupportActionBar(detail_toolbar)
-		// Show the Up button in the action bar.
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(detail_toolbar)
+        // Show the Up button in the action bar.
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-		val bundle: Bundle? = intent.extras
+        val bundle: Bundle? = intent.extras
 
-		if (bundle?.containsKey(ARG_ITEM_ID)!!) {
+        if (bundle?.containsKey(ARG_ITEM_ID)!!) {
 
-			val id = intent.getIntExtra(ARG_ITEM_ID, 0)
+            val id = intent.getIntExtra(ARG_ITEM_ID, 0)
 
-			loadDetails(id)
+            loadDetails(id)
 
-			initUpdateButton(id)
+            initUpdateButton(id)
 
-			initDeleteButton(id)
-		}
-	}
+            initDeleteButton(id)
+        }
+    }
 
-	private fun loadDetails(id: Int) {
+    private fun loadDetails(id: Int) {
+        val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+        val requestCall = destinationServices.getDestination(id)
+        requestCall.enqueue(object : Callback<Destination> {
+            override fun onFailure(call: Call<Destination>, t: Throwable) {
+                Log.d("onFailure", t.message)
+                Toast.makeText(
+                    this@DestinationDetailActivity,
+                    "Error occurred! " + t.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
 
-		// To be replaced by retrofit code
-		val destination = SampleData.getDestinationById(id)
+            override fun onResponse(call: Call<Destination>, response: Response<Destination>) {
+                if (response.isSuccessful) {
+                    val destination = response.body()
+                    destination?.let {
+                        et_city.setText(destination.city)
+                        et_description.setText(destination.description)
+                        et_country.setText(destination.country)
+                        collapsing_toolbar.title = destination.city
+                    }
+                } else if (response.code() == 401) {
+                    Log.d("onResponse", "session is expired - 401")
+                } else {
+                    // Status code is in the range of 300 to 500
+                    Log.d("onResponse", "failed to retrieve items - 300 : 500")
+                }
+            }
+        })
+    }
 
-		destination?.let {
-			et_city.setText(destination.city)
-			et_description.setText(destination.description)
-			et_country.setText(destination.country)
+    private fun initUpdateButton(id: Int) {
 
-			collapsing_toolbar.title = destination.city
-		}
-	}
+        btn_update.setOnClickListener {
 
-	private fun initUpdateButton(id: Int) {
+            val city = et_city.text.toString()
+            val description = et_description.text.toString()
+            val country = et_country.text.toString()
 
-		btn_update.setOnClickListener {
+            val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+            val requestCall = destinationServices.updateDestination(id, city, description, country)
+            requestCall.enqueue(object : Callback<Destination> {
+                override fun onFailure(call: Call<Destination>, t: Throwable) {
+                    Toast.makeText(
+                        this@DestinationDetailActivity,
+                        "Failed to update item!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
-			val city = et_city.text.toString()
-			val description = et_description.text.toString()
-			val country = et_country.text.toString()
+                override fun onResponse(call: Call<Destination>, response: Response<Destination>) {
+                    if (response.isSuccessful) {
+                        finish() // Move back to DestinationListActivity
+                        Toast.makeText(
+                            this@DestinationDetailActivity,
+                            "Item updated successfully!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@DestinationDetailActivity,
+                            "Failed to update item!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            })
+        }
+    }
 
-            // To be replaced by retrofit code
-            val destination = Destination()
-            destination.id = id
-            destination.city = city
-            destination.description = description
-            destination.country = country
+    private fun initDeleteButton(id: Int) {
 
-            SampleData.updateDestination(destination);
-            finish() // Move back to DestinationListActivity
-		}
-	}
+        btn_delete.setOnClickListener {
 
-	private fun initDeleteButton(id: Int) {
+            val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+            val requestCall = destinationServices.deleteDestination(id)
+            requestCall.enqueue(object : Callback<Unit> {
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    Toast.makeText(
+                        this@DestinationDetailActivity,
+                        "Failed to delete item!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
-		btn_delete.setOnClickListener {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful) {
+                        finish() // Move back to DestinationListActivity
+                        Toast.makeText(
+                            this@DestinationDetailActivity,
+                            "Item deleted successfully!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@DestinationDetailActivity,
+                            "Failed to delete item!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            })
+        }
+    }
 
-            // To be replaced by retrofit code
-            SampleData.deleteDestination(id)
-            finish() // Move back to DestinationListActivity
-		}
-	}
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == android.R.id.home) {
+            navigateUpTo(Intent(this, DestinationListActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		val id = item.itemId
-		if (id == android.R.id.home) {
-			navigateUpTo(Intent(this, DestinationListActivity::class.java))
-			return true
-		}
-		return super.onOptionsItemSelected(item)
-	}
+    companion object {
 
-	companion object {
-
-		const val ARG_ITEM_ID = "item_id"
-	}
+        const val ARG_ITEM_ID = "item_id"
+    }
 }

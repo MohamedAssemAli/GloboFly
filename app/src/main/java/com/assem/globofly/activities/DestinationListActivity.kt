@@ -38,6 +38,15 @@ class DestinationListActivity : AppCompatActivity() {
 
     private fun loadDestinations() {
         val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+//         using query
+//        val requestCall = destinationServices.getDestinationByQuery("India")
+
+//         using QueryMap
+//        val filter = HashMap<String, String>()
+//        filter["country"] = "India"
+//        filter["count"] = "1"
+//        val requestCall = destinationServices.getDestinationByQueryMap(filter)
+
         val requestCall = destinationServices.getDestinationList()
         requestCall.enqueue(object : Callback<List<Destination>> {
             override fun onFailure(call: Call<List<Destination>>, t: Throwable) {
