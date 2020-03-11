@@ -1,4 +1,4 @@
-package com.assem.globofly.activities
+package com.assem.globofly.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
-import com.assem.globofly.services.MessageService
-import com.assem.globofly.services.ServiceBuilder
+import com.assem.globofly.ui.destinationList.DestinationListActivity
+import com.assem.globofly.data.api.MessageService
+import com.assem.globofly.data.api.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_welcome.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,7 +20,8 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val messageService = ServiceBuilder.buildService(MessageService::class.java)
+        val messageService = ServiceBuilder.buildService(
+            MessageService::class.java)
         val requestCall = messageService.getMessages("http://10.0.2.2:7000/messages")
 
         requestCall.enqueue(object : Callback<String> {

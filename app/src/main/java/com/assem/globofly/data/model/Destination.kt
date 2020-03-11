@@ -1,4 +1,4 @@
-package com.assem.globofly.models
+package com.assem.globofly.data.model
 
 data class Destination(
 	var id: Int = 0,

@@ -14,32 +14,32 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".activities.DestinationListActivity"
+            android:name=".ui.destinationList.DestinationListActivity"
             android:label="Destination List"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.DestinationDetailActivity"
+            android:name=".ui.destinationDetail.DestinationDetailActivity"
             android:label="Destination Detail"
-            android:parentActivityName=".activities.DestinationListActivity"
+            android:parentActivityName=".ui.destinationList.DestinationListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.DestinationListActivity" />
+                android:value=".ui.destinationList.DestinationListActivity" />
         </activity>
 
         <activity
-            android:name=".activities.DestinationCreateActivity"
+            android:name=".ui.createDestination.DestinationCreateActivity"
             android:label="New Destination"
-            android:parentActivityName=".activities.DestinationListActivity"
+            android:parentActivityName=".ui.destinationList.DestinationListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.DestinationListActivity" />
+                android:value=".ui.destinationList.DestinationListActivity" />
         </activity>
 
         <activity
-            android:name=".activities.WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:label="GloboFly"
             android:theme="@style/AppTheme.NoActionBar">
 

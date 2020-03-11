@@ -1,4 +1,4 @@
-package com.assem.globofly.helpers
+package com.assem.globofly.ui.destinationList
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,15 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.assem.globofly.R
 
-import com.assem.globofly.activities.DestinationDetailActivity
-import com.assem.globofly.models.Destination
+import com.assem.globofly.ui.destinationDetail.DestinationDetailActivity
+import com.assem.globofly.data.model.Destination
 
 class DestinationAdapter(private val destinationList: List<Destination>) : RecyclerView.Adapter<DestinationAdapter.ViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
 		val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-		return ViewHolder(view)
+		return ViewHolder(
+			view
+		)
 	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {

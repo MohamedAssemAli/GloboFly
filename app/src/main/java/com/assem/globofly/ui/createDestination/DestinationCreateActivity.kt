@@ -1,13 +1,12 @@
-package com.assem.globofly.activities
+package com.assem.globofly.ui.createDestination
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
-import com.assem.globofly.helpers.SampleData
-import com.assem.globofly.models.Destination
-import com.assem.globofly.services.DestinationServices
-import com.assem.globofly.services.ServiceBuilder
+import com.assem.globofly.data.model.Destination
+import com.assem.globofly.data.api.DestinationServices
+import com.assem.globofly.data.api.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +30,8 @@ class DestinationCreateActivity : AppCompatActivity() {
             newDestination.description = et_description.text.toString()
             newDestination.country = et_country.text.toString()
 
-            val destinationService = ServiceBuilder.buildService(DestinationServices::class.java)
+            val destinationService = ServiceBuilder.buildService(
+                DestinationServices::class.java)
             val requestCall = destinationService.addDestination(newDestination)
             requestCall.enqueue(object : Callback<Destination> {
                 override fun onFailure(call: Call<Destination>, t: Throwable) {

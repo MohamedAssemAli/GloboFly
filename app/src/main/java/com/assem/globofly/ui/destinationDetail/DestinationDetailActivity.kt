@@ -1,4 +1,4 @@
-package com.assem.globofly.activities
+package com.assem.globofly.ui.destinationDetail
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
-import com.assem.globofly.helpers.SampleData
-import com.assem.globofly.models.Destination
-import com.assem.globofly.services.DestinationServices
-import com.assem.globofly.services.ServiceBuilder
+import com.assem.globofly.data.model.Destination
+import com.assem.globofly.data.api.DestinationServices
+import com.assem.globofly.data.api.ServiceBuilder
+import com.assem.globofly.ui.destinationList.DestinationListActivity
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,7 +42,8 @@ class DestinationDetailActivity : AppCompatActivity() {
     }
 
     private fun loadDetails(id: Int) {
-        val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+        val destinationServices = ServiceBuilder.buildService(
+            DestinationServices::class.java)
         val requestCall = destinationServices.getDestination(id)
         requestCall.enqueue(object : Callback<Destination> {
             override fun onFailure(call: Call<Destination>, t: Throwable) {
@@ -81,7 +82,8 @@ class DestinationDetailActivity : AppCompatActivity() {
             val description = et_description.text.toString()
             val country = et_country.text.toString()
 
-            val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+            val destinationServices = ServiceBuilder.buildService(
+                DestinationServices::class.java)
             val requestCall = destinationServices.updateDestination(id, city, description, country)
             requestCall.enqueue(object : Callback<Destination> {
                 override fun onFailure(call: Call<Destination>, t: Throwable) {
@@ -116,7 +118,8 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         btn_delete.setOnClickListener {
 
-            val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+            val destinationServices = ServiceBuilder.buildService(
+                DestinationServices::class.java)
             val requestCall = destinationServices.deleteDestination(id)
             requestCall.enqueue(object : Callback<Unit> {
                 override fun onFailure(call: Call<Unit>, t: Throwable) {

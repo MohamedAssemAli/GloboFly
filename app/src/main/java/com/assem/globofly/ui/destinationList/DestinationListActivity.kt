@@ -1,4 +1,4 @@
-package com.assem.globofly.activities
+package com.assem.globofly.ui.destinationList
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.assem.globofly.R
-import com.assem.globofly.helpers.DestinationAdapter
-import com.assem.globofly.models.Destination
-import com.assem.globofly.services.DestinationServices
-import com.assem.globofly.services.ServiceBuilder
+import com.assem.globofly.data.model.Destination
+import com.assem.globofly.data.api.DestinationServices
+import com.assem.globofly.data.api.ServiceBuilder
+import com.assem.globofly.ui.createDestination.DestinationCreateActivity
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,7 +37,8 @@ class DestinationListActivity : AppCompatActivity() {
     }
 
     private fun loadDestinations() {
-        val destinationServices = ServiceBuilder.buildService(DestinationServices::class.java)
+        val destinationServices = ServiceBuilder.buildService(
+            DestinationServices::class.java)
 //         using query
 //        val requestCall = destinationServices.getDestinationByQuery("India")
 
@@ -65,7 +66,10 @@ class DestinationListActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     // Status code is in the range of 200 to 299
                     val destinationList = response.body()!!
-                    destiny_recycler_view.adapter = DestinationAdapter(destinationList)
+                    destiny_recycler_view.adapter =
+                        DestinationAdapter(
+                            destinationList
+                        )
                 } else if (response.code() == 401) {
                     Log.d("onResponse", "session is expired - 401")
                 } else {

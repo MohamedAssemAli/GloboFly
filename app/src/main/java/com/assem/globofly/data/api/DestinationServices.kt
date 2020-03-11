@@ -1,6 +1,6 @@
-package com.assem.globofly.services
+package com.assem.globofly.data.api
 
-import com.assem.globofly.models.Destination
+import com.assem.globofly.data.model.Destination
 import retrofit2.Call
 import retrofit2.http.*
 

@@ -6,7 +6,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:fitsSystemWindows="true"
-		tools:context=".activities.DestinationListActivity">
+		tools:context=".ui.destinationList.DestinationListActivity">
 
 	<com.google.android.material.appbar.AppBarLayout
 			android:id="@+id/app_bar"
@@ -33,7 +33,7 @@
 				android:layout_height="match_parent"
 				android:layout_marginTop="5dp"
 				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-				tools:context=".activities.DestinationListActivity"
+				tools:context=".ui.destinationList.DestinationListActivity"
 				tools:listitem="@layout/list_item"/>
 
 	</FrameLayout>

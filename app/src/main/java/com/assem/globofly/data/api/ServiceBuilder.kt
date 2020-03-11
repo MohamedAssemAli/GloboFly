@@ -1,9 +1,8 @@
-package com.assem.globofly.services
+package com.assem.globofly.data.api
 
 import android.os.Build
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

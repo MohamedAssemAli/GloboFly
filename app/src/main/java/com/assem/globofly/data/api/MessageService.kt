@@ -1,4 +1,4 @@
-package com.assem.globofly.services
+package com.assem.globofly.data.api
 
 import retrofit2.Call
 import retrofit2.http.GET
